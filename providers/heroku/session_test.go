@@ -3,8 +3,8 @@ package heroku_test
 import (
 	"testing"
 
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/heroku"
+	"github.com/admpub/goth"
+	"github.com/admpub/goth/providers/heroku"
 	"github.com/stretchr/testify/assert"
 )
 

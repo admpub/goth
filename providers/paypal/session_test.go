@@ -3,8 +3,8 @@ package paypal_test
 import (
 	"testing"
 
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/paypal"
+	"github.com/admpub/goth"
+	"github.com/admpub/goth/providers/paypal"
 	"github.com/stretchr/testify/assert"
 )
 

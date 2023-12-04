@@ -5,17 +5,17 @@ import (
 	"compress/gzip"
 	"fmt"
 	"html"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
 
+	"github.com/admpub/goth"
+	. "github.com/admpub/goth/gothic"
+	"github.com/admpub/goth/providers/faux"
 	"github.com/gorilla/sessions"
-	"github.com/markbates/goth"
-	. "github.com/markbates/goth/gothic"
-	"github.com/markbates/goth/providers/faux"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -283,7 +283,7 @@ func ungzipString(value string) string {
 	if err != nil {
 		return "err"
 	}
-	s, err := ioutil.ReadAll(r)
+	s, err := io.ReadAll(r)
 	if err != nil {
 		return "err"
 	}

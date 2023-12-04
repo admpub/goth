@@ -3,8 +3,8 @@ package shopify_test
 import (
 	"testing"
 
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/shopify"
+	"github.com/admpub/goth"
+	"github.com/admpub/goth/providers/shopify"
 	"github.com/stretchr/testify/assert"
 )
 

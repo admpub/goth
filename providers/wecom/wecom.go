@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/markbates/goth"
+	"github.com/admpub/goth"
 	"golang.org/x/oauth2"
 )
 

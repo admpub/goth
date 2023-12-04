@@ -3,7 +3,7 @@ Package gothic wraps common behaviour when using Goth. This makes it quick, and 
 and running with Goth. Of course, if you want complete control over how things flow, in regard
 to the authentication process, feel free and use Goth directly.
 
-See https://github.com/markbates/goth/blob/master/examples/main.go to see this in action.
+See https://github.com/admpub/goth/blob/master/examples/main.go to see this in action.
 */
 package gothic
 
@@ -16,15 +16,14 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
 
+	"github.com/admpub/goth"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	"github.com/markbates/goth"
 )
 
 // SessionName is the key used to access the session store.
@@ -59,7 +58,7 @@ as either "provider" or ":provider".
 BeginAuthHandler will redirect the user to the appropriate authentication end-point
 for the requested provider.
 
-See https://github.com/markbates/goth/examples/main.go to see this in action.
+See https://github.com/admpub/goth/examples/main.go to see this in action.
 */
 func BeginAuthHandler(res http.ResponseWriter, req *http.Request) {
 	url, err := GetAuthURL(res, req)
@@ -156,7 +155,7 @@ process and fetches all the basic information about the user from the provider.
 It expects to be able to get the name of the provider from the query parameters
 as either "provider" or ":provider".
 
-See https://github.com/markbates/goth/examples/main.go to see this in action.
+See https://github.com/admpub/goth/examples/main.go to see this in action.
 */
 var CompleteUserAuth = func(res http.ResponseWriter, req *http.Request) (goth.User, error) {
 	if !keySet && defaultStore == Store {
@@ -288,14 +287,29 @@ func getProviderName(req *http.Request) (string, error) {
 	}
 
 	// As a fallback, loop over the used providers, if we already have a valid session for any provider (ie. user has already begun authentication with a provider), then return that provider name
-	providers := goth.GetProviders()
+	//providers := goth.GetProviders()
 	session, _ := Store.Get(req, SessionName)
+	/*/
 	for _, provider := range providers {
 		p := provider.Name()
 		value := session.Values[p]
 		if _, ok := value.(string); ok {
 			return p, nil
 		}
+	}
+	// */
+	var providerName string
+	goth.RangeProviders(func(_ string, provider goth.Provider) bool {
+		p := provider.Name()
+		value := session.Values[p]
+		if _, ok := value.(string); ok {
+			providerName = p
+			return false
+		}
+		return true
+	})
+	if len(providerName) > 0 {
+		return providerName, nil
 	}
 
 	// if not found then return an empty string with the corresponding error
@@ -341,7 +355,7 @@ func getSessionValue(session *sessions.Session, key string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	s, err := ioutil.ReadAll(r)
+	s, err := io.ReadAll(r)
 	if err != nil {
 		return "", err
 	}

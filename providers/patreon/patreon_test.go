@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/markbates/goth"
+	"github.com/admpub/goth"
 	"github.com/stretchr/testify/assert"
 )
 

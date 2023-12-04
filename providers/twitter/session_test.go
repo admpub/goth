@@ -3,8 +3,8 @@ package twitter_test
 import (
 	"testing"
 
-	"github.com/markbates/goth"
-	"github.com/markbates/goth/providers/twitter"
+	"github.com/admpub/goth"
+	"github.com/admpub/goth/providers/twitter"
 	"github.com/stretchr/testify/assert"
 )
 

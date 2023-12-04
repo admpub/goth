@@ -1,17 +1,17 @@
-# Goth: Multi-Provider Authentication for Go [![GoDoc](https://godoc.org/github.com/markbates/goth?status.svg)](https://godoc.org/github.com/markbates/goth) [![Build Status](https://github.com/markbates/goth/workflows/ci/badge.svg)](https://github.com/markbates/goth/actions) [![Go Report Card](https://goreportcard.com/badge/github.com/markbates/goth)](https://goreportcard.com/report/github.com/markbates/goth)
+# Goth: Multi-Provider Authentication for Go [![GoDoc](https://godoc.org/github.com/admpub/goth?status.svg)](https://godoc.org/github.com/admpub/goth) [![Build Status](https://github.com/admpub/goth/workflows/ci/badge.svg)](https://github.com/admpub/goth/actions) [![Go Report Card](https://goreportcard.com/badge/github.com/admpub/goth)](https://goreportcard.com/report/github.com/admpub/goth)
 
 Package goth provides a simple, clean, and idiomatic way to write authentication
 packages for Go web applications.
 
 Unlike other similar packages, Goth, lets you write OAuth, OAuth2, or any other
-protocol providers, as long as they implement the [Provider](https://github.com/markbates/goth/blob/master/provider.go#L13-L22) and [Session](https://github.com/markbates/goth/blob/master/session.go#L13-L21) interfaces.
+protocol providers, as long as they implement the [Provider](https://github.com/admpub/goth/blob/master/provider.go#L13-L22) and [Session](https://github.com/admpub/goth/blob/master/session.go#L13-L21) interfaces.
 
 This package was inspired by [https://github.com/intridea/omniauth](https://github.com/intridea/omniauth).
 
 ## Installation
 
 ```text
-$ go get github.com/markbates/goth
+$ go get github.com/admpub/goth
 ```
 
 ## Supported Providers
@@ -87,11 +87,11 @@ through Twitter, Facebook, Google Plus etc.
 To run the example either clone the source from GitHub
 
 ```text
-$ git clone git@github.com:markbates/goth.git
+$ git clone git@github.com:admpub/goth.git
 ```
 or use
 ```text
-$ go get github.com/markbates/goth
+$ go get github.com/admpub/goth
 ```
 ```text
 $ cd goth/examples
