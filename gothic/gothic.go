@@ -29,6 +29,16 @@ import (
 // SessionName is the key used to access the session store.
 const SessionName = "_gothic_session"
 
+const redirectURIQueryString = `redirect_uri=%2F`
+
+func fixedRedirectURIQueryString(req *http.Request, authURL string) string {
+	pos := strings.Index(authURL, redirectURIQueryString)
+	if pos > 0 {
+		authURL = authURL[0:pos] + `redirect_uri=` + url.QueryEscape(req.URL.Scheme+`://`+req.URL.Host) + authURL[pos+len(redirectURIQueryString):]
+	}
+	return authURL
+}
+
 // Store can/should be set by applications using gothic. The default is a cookie store.
 var Store sessions.Store
 var defaultStore sessions.Store
@@ -138,7 +148,7 @@ func GetAuthURL(res http.ResponseWriter, req *http.Request) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
+	url = fixedRedirectURIQueryString(req, url)
 	err = StoreInSession(providerName, sess.Marshal(), req, res)
 
 	if err != nil {
