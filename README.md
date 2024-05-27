@@ -23,6 +23,7 @@ $ go get github.com/admpub/goth
 * Battle.net
 * Bitbucket
 * Box
+* ClassLink
 * Cloud Foundry
 * Dailymotion
 * Deezer

@@ -1,22 +1,23 @@
-package deezer
+package hubspot
 
 import (
 	"encoding/json"
 	"errors"
 	"strings"
-	"time"
 
 	"github.com/admpub/goth"
 )
 
-// Session stores data during the auth process with Deezer.
+// Session stores data during the auth process with Hubspot.
 type Session struct {
-	AuthURL     string
-	AccessToken string
-	ExpiresAt   time.Time
+	AuthURL      string
+	AccessToken  string
+	RefreshToken string
 }
 
-// GetAuthURL will return the URL set by calling the `BeginAuth` function on the Deezer provider.
+var _ goth.Session = &Session{}
+
+// GetAuthURL will return the URL set by calling the `BeginAuth` function on the Hubspot provider.
 func (s Session) GetAuthURL() (string, error) {
 	if s.AuthURL == "" {
 		return "", errors.New(goth.NoAuthUrlErrorMessage)
@@ -24,12 +25,11 @@ func (s Session) GetAuthURL() (string, error) {
 	return s.AuthURL, nil
 }
 
-// Authorize the session with Deezer and return the access token to be stored for future use.
+// Authorize the session with Hubspot and return the access token to be stored for future use.
 func (s *Session) Authorize(provider goth.Provider, params goth.Params) (string, error) {
 	p := provider.(*Provider)
+	token, err := p.config.Exchange(goth.ContextForClient(p.Client()), params.Get("code"))
 
-	ctx := goth.ContextForClient(p.Client())
-	token, err := p.config.Exchange(ctx, params.Get("code"))
 	if err != nil {
 		return "", err
 	}
@@ -38,13 +38,8 @@ func (s *Session) Authorize(provider goth.Provider, params goth.Params) (string,
 		return "", errors.New("Invalid token received from provider")
 	}
 
-	expires, ok := token.Extra("expires").(float64)
-	if ok != true {
-		return "", errors.New("Invalid token received from provider")
-	}
-
 	s.AccessToken = token.AccessToken
-	s.ExpiresAt = time.Now().Add(time.Second * time.Duration(expires))
+	s.RefreshToken = token.RefreshToken
 	return token.AccessToken, err
 }
 
@@ -58,9 +53,9 @@ func (s Session) String() string {
 	return s.Marshal()
 }
 
-// UnmarshalSession will unmarshal a JSON string into a session.
+// UnmarshalSession wil unmarshal a JSON string into a session.
 func (p *Provider) UnmarshalSession(data string) (goth.Session, error) {
-	sess := &Session{}
-	err := json.NewDecoder(strings.NewReader(data)).Decode(sess)
-	return sess, err
+	s := &Session{}
+	err := json.NewDecoder(strings.NewReader(data)).Decode(s)
+	return s, err
 }
