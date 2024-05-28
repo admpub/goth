@@ -14,6 +14,10 @@ const (
 	SchemeHTTP             = `http`
 )
 
+type RootURLSetter interface {
+	SetRootURL(rootURL string)
+}
+
 func CurrentRootURL(req *http.Request) string {
 	var host string
 	var scheme string

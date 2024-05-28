@@ -134,13 +134,20 @@ func GetAuthURL(res http.ResponseWriter, req *http.Request) (string, error) {
 		return "", err
 	}
 
+	//[SWH|+]
+	if st, ok := sess.(RootURLSetter); ok {
+		st.SetRootURL(CurrentRootURL(req))
+	}
+
 	url, err := sess.GetAuthURL()
 	if err != nil {
 		return "", err
 	}
-	url = FixedRedirectURIQueryString(req, url)
-	err = StoreInSession(providerName, sess.Marshal(), req, res)
 
+	//[SWH|+]
+	url = FixedRedirectURIQueryString(req, url)
+
+	err = StoreInSession(providerName, sess.Marshal(), req, res)
 	if err != nil {
 		return "", err
 	}
@@ -180,6 +187,11 @@ var CompleteUserAuth = func(res http.ResponseWriter, req *http.Request) (goth.Us
 	sess, err := provider.UnmarshalSession(value)
 	if err != nil {
 		return goth.User{}, err
+	}
+
+	//[SWH|+]
+	if st, ok := sess.(RootURLSetter); ok {
+		st.SetRootURL(CurrentRootURL(req))
 	}
 
 	err = validateState(req, sess)
